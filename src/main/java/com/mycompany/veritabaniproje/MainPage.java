@@ -5,10 +5,12 @@
 package com.mycompany.veritabaniproje;
 
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -27,6 +29,34 @@ public class MainPage extends javax.swing.JFrame {
         init();
     }
     
+    public void refreshTable(){
+         String tc = VeriTabaniProje.customer.getTcno();
+         String sqlquery = "select* from emlaklar where emlaklar.tapuno in (select tapuno from sahiplik where tcno='"+tc+"')";
+        ResultSet rs = DBConnection.list(sqlquery);
+        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat"};
+        Object[] rows = new Object[5];
+        
+        myModel.setColumnCount(0);
+        myModel.setRowCount(0);
+        myModel.setColumnIdentifiers(columns);
+        
+        try {
+            while(rs.next()){
+                rows[0]=rs.getString("tapuno");
+                rows[1]=rs.getString("il");
+                rows[2]=rs.getString("ilçe");
+                rows[3]=rs.getString("mahalle");
+                rows[4]=rs.getString("fiyat");
+                myModel.addRow(rows);
+                        
+                        
+            }
+             jTable1.setModel(myModel);
+        } catch (SQLException e) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, e);
+
+        }
+    }
     
     public void init(){
         myModel = new DefaultTableModel(){
@@ -36,7 +66,23 @@ public class MainPage extends javax.swing.JFrame {
             } 
         };
         String tc = VeriTabaniProje.customer.getTcno();
-        String sqlquery = "select* from arsalar where arsalar.tapuno in (select tapuno from sahiplik where tcno='"+tc+"')";
+       // String sqlquery = "select* from arsalar where arsalar.tapuno in (select tapuno from sahiplik where tcno='"+tc+"')";
+        String sqlquery = "create or replace view emlaklar as "
+                + "select * "
+                + "from arsalar "
+                + "where arsalar.tapuno in "
+                + "(select tapuno "
+                + "from sahiplik "
+                + "where tcno='"+tc+"')";
+         String selectquery = "select * from emlaklar";
+        
+         try {
+            PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(sqlquery);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+             Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, e);
+        }
+         
         
        
         
@@ -48,7 +94,7 @@ public class MainPage extends javax.swing.JFrame {
         myModel.setRowCount(0);
         myModel.setColumnIdentifiers(columns);
         
-        ResultSet rs = DBConnection.list(sqlquery);
+        ResultSet rs = DBConnection.list(selectquery);
         
         try {
             while(rs.next()){
@@ -103,8 +149,18 @@ public class MainPage extends javax.swing.JFrame {
         jLabel1.setText("ARSALARIM");
 
         jButtonArsaBagisla.setText("Arsa Bağışla");
+        jButtonArsaBagisla.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonArsaBagislaActionPerformed(evt);
+            }
+        });
 
         jButtonFiyatDuzenle.setText("Arsa Fiyatını Düzenle");
+        jButtonFiyatDuzenle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFiyatDuzenleActionPerformed(evt);
+            }
+        });
 
         jButtonArsaSatinAl.setText("Arsa Satın Al");
         jButtonArsaSatinAl.addActionListener(new java.awt.event.ActionListener() {
@@ -140,15 +196,16 @@ public class MainPage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(105, 105, 105)
                         .addComponent(jButtonArsaSatinAl, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)
                         .addComponent(jButtonArsaBagisla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
-                        .addComponent(jButtonFiyatDuzenle, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(21, 21, 21))
+                        .addComponent(jButtonFiyatDuzenle, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         pack();
@@ -159,8 +216,71 @@ public class MainPage extends javax.swing.JFrame {
         BuyingPage buyingPage = new BuyingPage();
         buyingPage.setVisible(true);
         buyingPage.pack();
+        buyingPage.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonArsaSatinAlActionPerformed
+
+    private void jButtonArsaBagislaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonArsaBagislaActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow();
+        if(selectedRow == -1){
+            JOptionPane.showMessageDialog(null, "Lütfen bir arsa seçiniz");
+
+        }else{
+            String TC = JOptionPane.showInputDialog(null, "Bağış yapmak istediğiniz kişinin TC Kimlik Numarası:");
+            if(DBConnection.checkUserWithTc(TC)){
+                Object tapuNo = model.getValueAt(selectedRow, 0);
+                tapuNo = (String) tapuNo;
+                
+                
+                String query = "update sahiplik set tcno = '"+TC+"' where tapuno = '"+tapuNo+"'";
+                try {
+                    
+                    DBConnection.insertIslem(tapuNo.toString(), TC, VeriTabaniProje.customer.getTcno(), "bağış", "bağış", "bağış");
+            
+                    PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
+                    preparedStatement.executeUpdate();
+                
+                
+                } catch (Exception e) {
+                    Logger.getLogger(BuyingPage.class.getName()).log(Level.SEVERE,null,e);
+                    JOptionPane.showMessageDialog(null, e);
+
+                }
+                refreshTable();
+            }else{
+                JOptionPane.showMessageDialog(null, "Kayıtlı kullanıcı bulunmamaktadır!");
+            }
+            
+            
+        }
+    }//GEN-LAST:event_jButtonArsaBagislaActionPerformed
+
+    private void jButtonFiyatDuzenleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiyatDuzenleActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Lütfen bir arsa seçiniz");
+        } else {
+            Object tapuno = model.getValueAt(selectedRow, 0);
+            tapuno = (String) tapuno;
+            String fiyat = JOptionPane.showInputDialog(null, "Yeni Fiyat: ");
+            String query = "update arsalar set fiyat = '"+fiyat+"' where tapuno='"+tapuno+"' ";
+             try {
+                    PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
+                    preparedStatement.executeUpdate();
+                
+                
+                } catch (Exception e) {
+                    Logger.getLogger(BuyingPage.class.getName()).log(Level.SEVERE,null,e);
+                    JOptionPane.showMessageDialog(null, e);
+
+                }
+                refreshTable();
+        }
+    }//GEN-LAST:event_jButtonFiyatDuzenleActionPerformed
 
     /**
      * @param args the command line arguments

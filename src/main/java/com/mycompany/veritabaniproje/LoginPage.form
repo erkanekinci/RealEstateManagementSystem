@@ -50,6 +50,10 @@
                       <EmptySpace min="-2" pref="345" max="-2" attributes="0"/>
                       <Component id="jButtonLogin" min="-2" pref="107" max="-2" attributes="0"/>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="243" max="-2" attributes="0"/>
+                      <Component id="jButtonYönetici" min="-2" pref="139" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace pref="130" max="32767" attributes="0"/>
           </Group>
@@ -73,7 +77,9 @@
                   <Component id="jButtonLogin" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                   <Component id="jButtonRegister" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="109" max="32767" attributes="0"/>
+              <EmptySpace pref="34" max="32767" attributes="0"/>
+              <Component id="jButtonYönetici" min="-2" pref="44" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -114,6 +120,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRegisterActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButtonY&#xf6;netici">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Y&#xd6;NET&#x130;C&#x130; G&#x130;R&#x130;&#x15e;&#x130;"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

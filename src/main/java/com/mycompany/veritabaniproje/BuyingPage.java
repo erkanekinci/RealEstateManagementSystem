@@ -4,10 +4,12 @@
  */
 package com.mycompany.veritabaniproje;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,7 +35,7 @@ public class BuyingPage extends javax.swing.JFrame {
             } 
         };
         String tc = VeriTabaniProje.customer.getTcno();
-        String sqlquery = "select* from arsalar where arsalar.tapuno in (select tapuno from sahiplik where tcno!='"+tc+"')";
+        String sqlquery = "select * from arsalar except select * from arsalar where arsalar.tapuno in (select tapuno from sahiplik where tcno='"+tc+"')";
         
        
         
@@ -67,6 +69,42 @@ public class BuyingPage extends javax.swing.JFrame {
         
         
     }
+    
+    
+    public void refreshTable(){
+         String tc = VeriTabaniProje.customer.getTcno();
+        String sqlquery = "select* from arsalar where arsalar.tapuno in (select tapuno from sahiplik where tcno!='"+tc+"')";
+        
+       
+        
+        
+        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat"};
+        Object[] rows = new Object[5];
+        
+        myModel.setColumnCount(0);
+        myModel.setRowCount(0);
+        myModel.setColumnIdentifiers(columns);
+        
+        ResultSet rs = DBConnection.list(sqlquery);
+        
+        try {
+            while(rs.next()){
+                rows[0]=rs.getString("tapuno");
+                rows[1]=rs.getString("il");
+                rows[2]=rs.getString("ilçe");
+                rows[3]=rs.getString("mahalle");
+                rows[4]=rs.getString("fiyat");
+                myModel.addRow(rows);
+                        
+                        
+            }
+             jTable1.setModel(myModel);
+        } catch (SQLException e) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, e);
+
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,7 +117,8 @@ public class BuyingPage extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jButtonSatinAl = new javax.swing.JButton();
+        jButtonGeri = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,33 +135,96 @@ public class BuyingPage extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Satın Al");
+        jButtonSatinAl.setText("Satın Al");
+        jButtonSatinAl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSatinAlActionPerformed(evt);
+            }
+        });
+
+        jButtonGeri.setText("Geri");
+        jButtonGeri.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGeriActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(211, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(85, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonGeri)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jButtonSatinAl, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(386, 386, 386)
+                .addComponent(jButtonSatinAl, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(27, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonGeri)
+                .addGap(16, 16, 16))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonGeriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGeriActionPerformed
+        // TODO add your handling code here
+        MainPage mainPage = new MainPage();
+        mainPage.setVisible(true);
+        mainPage.pack();
+        mainPage.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonGeriActionPerformed
+
+    private void jButtonSatinAlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSatinAlActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow();
+        Object tapuNo = model.getValueAt(selectedRow, 0);
+        tapuNo = (String) tapuNo;
+        Object fiyat = model.getValueAt(selectedRow, 4);
+        Integer ekstra = Integer.parseInt(fiyat.toString());
+        ekstra = ekstra *5 /100;
+        Integer toplam = Integer.parseInt(fiyat.toString())+ekstra+1500;
+        String tc = VeriTabaniProje.customer.getTcno();
+        String sqlquery = "select tcno from sahiplik where tapuno= '"+tapuNo+"'";
+        String TC = "";
+        String query = "update sahiplik set tcno = '"+tc+"' where tapuno = '"+tapuNo+"'";
+        try {
+            
+            PreparedStatement preparedStatement1 = DBConnection.connection.prepareStatement(sqlquery);
+            ResultSet rs = preparedStatement1.executeQuery();
+            if(rs.next()){
+                TC = rs.getString(1);  
+            }
+            DBConnection.insertIslem(tapuNo.toString(), tc, TC, fiyat.toString(), ekstra.toString(), toplam.toString());
+             PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
+            preparedStatement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Arsa Satın Alındı");
+        } catch (SQLException e) {
+            Logger.getLogger(BuyingPage.class.getName()).log(Level.SEVERE,null,e);
+        }
+        
+        refreshTable();
+        
+        
+    }//GEN-LAST:event_jButtonSatinAlActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,7 +262,8 @@ public class BuyingPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonGeri;
+    private javax.swing.JButton jButtonSatinAl;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
