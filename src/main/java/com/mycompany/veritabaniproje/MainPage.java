@@ -33,8 +33,8 @@ public class MainPage extends javax.swing.JFrame {
          String tc = VeriTabaniProje.customer.getTcno();
          String sqlquery = "select* from emlaklar where emlaklar.tapuno in (select tapuno from sahiplik where tcno='"+tc+"')";
         ResultSet rs = DBConnection.list(sqlquery);
-        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat"};
-        Object[] rows = new Object[5];
+        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat","Satılık"};
+        Object[] rows = new Object[6];
         
         myModel.setColumnCount(0);
         myModel.setRowCount(0);
@@ -47,6 +47,7 @@ public class MainPage extends javax.swing.JFrame {
                 rows[2]=rs.getString("ilçe");
                 rows[3]=rs.getString("mahalle");
                 rows[4]=rs.getString("fiyat");
+                rows[5]=rs.getString("satılık");
                 myModel.addRow(rows);
                         
                         
@@ -87,8 +88,8 @@ public class MainPage extends javax.swing.JFrame {
        
         
         
-        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat"};
-        Object[] rows = new Object[5];
+        Object[] columns = {"Tapu No","İl","İlçe","Mahalle","Fiyat","Satılık"};
+        Object[] rows = new Object[6];
         
         myModel.setColumnCount(0);
         myModel.setRowCount(0);
@@ -103,6 +104,7 @@ public class MainPage extends javax.swing.JFrame {
                 rows[2]=rs.getString("ilçe");
                 rows[3]=rs.getString("mahalle");
                 rows[4]=rs.getString("fiyat");
+                rows[5]=rs.getString("satılık");
                 myModel.addRow(rows);
                         
                         
@@ -132,6 +134,9 @@ public class MainPage extends javax.swing.JFrame {
         jButtonArsaBagisla = new javax.swing.JButton();
         jButtonFiyatDuzenle = new javax.swing.JButton();
         jButtonArsaSatinAl = new javax.swing.JButton();
+        jButtonCikis = new javax.swing.JButton();
+        jButtonArsaEkle = new javax.swing.JButton();
+        jButtonSatis = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,7 +160,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
-        jButtonFiyatDuzenle.setText("Arsa Fiyatını Düzenle");
+        jButtonFiyatDuzenle.setText("<html>Arsa Fiyatını Düzenle</html>");
         jButtonFiyatDuzenle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonFiyatDuzenleActionPerformed(evt);
@@ -166,6 +171,27 @@ public class MainPage extends javax.swing.JFrame {
         jButtonArsaSatinAl.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonArsaSatinAlActionPerformed(evt);
+            }
+        });
+
+        jButtonCikis.setText("Çıkış");
+        jButtonCikis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCikisActionPerformed(evt);
+            }
+        });
+
+        jButtonArsaEkle.setText("Arsa Ekle");
+        jButtonArsaEkle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonArsaEkleActionPerformed(evt);
+            }
+        });
+
+        jButtonSatis.setText("<html>Satışa Çıkar / Satıştan Kaldır</html>");
+        jButtonSatis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSatisActionPerformed(evt);
             }
         });
 
@@ -180,32 +206,42 @@ public class MainPage extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(146, 146, 146))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonArsaBagisla, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonFiyatDuzenle, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonArsaSatinAl, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(116, 116, 116)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonSatis, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jButtonFiyatDuzenle, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                            .addComponent(jButtonArsaBagisla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonArsaSatinAl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonArsaEkle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(106, 106, 106)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButtonCikis)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
+                        .addGap(49, 49, 49)
+                        .addComponent(jButtonArsaEkle, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
                         .addComponent(jButtonArsaSatinAl, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
+                        .addGap(32, 32, 32)
                         .addComponent(jButtonArsaBagisla, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
                         .addComponent(jButtonFiyatDuzenle, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(23, 23, 23)
+                        .addComponent(jButtonSatis, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCikis)
+                .addGap(4, 4, 4))
         );
 
         pack();
@@ -237,7 +273,7 @@ public class MainPage extends javax.swing.JFrame {
                 String query = "update sahiplik set tcno = '"+TC+"' where tapuno = '"+tapuNo+"'";
                 try {
                     
-                    DBConnection.insertIslem(tapuNo.toString(), TC, VeriTabaniProje.customer.getTcno(), "bağış", "bağış", "bağış");
+                    DBConnection.insertIslem(tapuNo.toString(), TC, VeriTabaniProje.customer.getTcno(), "bağış", 0, "bağış");
             
                     PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
                     preparedStatement.executeUpdate();
@@ -274,13 +310,77 @@ public class MainPage extends javax.swing.JFrame {
                 
                 
                 } catch (Exception e) {
-                    Logger.getLogger(BuyingPage.class.getName()).log(Level.SEVERE,null,e);
+                    Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE,null,e);
                     JOptionPane.showMessageDialog(null, e);
 
                 }
                 refreshTable();
         }
     }//GEN-LAST:event_jButtonFiyatDuzenleActionPerformed
+
+    private void jButtonCikisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCikisActionPerformed
+        // TODO add your handling code here:
+        LoginPage loginPage = new LoginPage();
+        loginPage.setVisible(true);
+        loginPage.pack();
+        loginPage.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonCikisActionPerformed
+
+    private void jButtonArsaEkleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonArsaEkleActionPerformed
+        // TODO add your handling code here:
+        ArsaEklePage arsaEklePage = new ArsaEklePage();
+        arsaEklePage.setVisible(true);
+        arsaEklePage.pack();
+        arsaEklePage.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonArsaEkleActionPerformed
+
+    private void jButtonSatisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSatisActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Lütfen bir arsa seçiniz");
+        } else {
+            Object tapuno = model.getValueAt(selectedRow, 0);
+            tapuno = (String) tapuno;
+            String satılık = model.getValueAt(selectedRow, 5).toString();
+            
+            Integer satılık2 = Integer.parseInt(satılık);
+            if(satılık2 == 1){
+                int result = JOptionPane.showConfirmDialog(null,"<html>Satıştan Kaldırılacaktır Onaylıyor Musunuz?</html>","Onay",JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    String sql = "update arsalar set satılık = -1 where tapuno = '"+tapuno+"'";
+                    try {
+                        PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(sql);
+                        preparedStatement.execute();
+                        JOptionPane.showMessageDialog(null, "Arsa Satıştan Kaldırılmıştır!");
+                    } catch (SQLException e) {
+                        Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE,null,e);
+                    }
+                }
+                
+            }else if (satılık2 == -1) {
+                int result = JOptionPane.showConfirmDialog(null,"<html>Satışa Çıkarılacaktır Onaylıyor Musunuz?</html>","Onay",JOptionPane.YES_NO_OPTION);
+                   if (result == JOptionPane.YES_OPTION) {
+                       String sql = "update arsalar set satılık = 1 where tapuno = '"+tapuno+"'";
+                       try {
+                        PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(sql);
+                        preparedStatement.execute();
+                        JOptionPane.showMessageDialog(null, "Arsa Satışa Çıkarılmıştır!");
+                    } catch (SQLException e) {
+                        Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE,null,e);
+                    }
+                    
+                }
+                   
+                
+                
+            }
+            refreshTable();
+        }
+    }//GEN-LAST:event_jButtonSatisActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,8 +419,11 @@ public class MainPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonArsaBagisla;
+    private javax.swing.JButton jButtonArsaEkle;
     private javax.swing.JButton jButtonArsaSatinAl;
+    private javax.swing.JButton jButtonCikis;
     private javax.swing.JButton jButtonFiyatDuzenle;
+    private javax.swing.JButton jButtonSatis;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.logging.Level;
@@ -105,12 +106,13 @@ public class DBConnection {
     }
     
     
-    static void insertIslem( String tapuno,String alıcı,String satıcı,String fiyat,String ekstra,String toplam ){
+    static void insertIslem( String tapuno,String alıcı,String satıcı,String fiyat,Integer ekstra,String toplam ){
         String query = "insert into islem(id,tapuno,alıcı,satıcı,fiyat,ekstra,toplam,tarih) values(?,?,?,?,?,?,?,?)";
         String sqlquery = "select nextval ('idseq'); ";
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-       
         Date date = new Date(System.currentTimeMillis()); 
+        long millis = date.getTime();
+        Timestamp timestamp = new Timestamp(millis);
         System.out.println(date);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlquery);
@@ -125,9 +127,9 @@ public class DBConnection {
             preparedStatement2.setString(3, alıcı);
             preparedStatement2.setString(4, satıcı);
             preparedStatement2.setString(5, fiyat);
-            preparedStatement2.setString(6, ekstra);
+            preparedStatement2.setInt(6, ekstra);
             preparedStatement2.setString(7, toplam);
-            preparedStatement2.setDate(8, date);
+            preparedStatement2.setTimestamp(8, timestamp);
             preparedStatement2.executeUpdate();
 
             

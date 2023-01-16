@@ -65,6 +65,11 @@ public class LoginPage extends javax.swing.JFrame {
         });
 
         jButtonYönetici.setText("YÖNETİCİ GİRİŞİ");
+        jButtonYönetici.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonYöneticiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -136,6 +141,7 @@ public class LoginPage extends javax.swing.JFrame {
             MainPage mainPage = new MainPage();
             mainPage.setVisible(true);
             mainPage.pack();
+            mainPage.setLocationRelativeTo(null);
             this.dispose();
         }
         else{
@@ -150,6 +156,25 @@ public class LoginPage extends javax.swing.JFrame {
         registerPage.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonRegisterActionPerformed
+
+    private void jButtonYöneticiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonYöneticiActionPerformed
+        // TODO add your handling code here:
+        
+        
+        String TC = jTextFieldTC.getText();
+        String Sifre = jPasswordField1.getText();
+        if(TC.equals("admin") && Sifre.equals("admin")){
+            YoneticiPage yoneticiPage = new YoneticiPage();
+            yoneticiPage.setVisible(true);
+            yoneticiPage.pack();
+            yoneticiPage.setLocationRelativeTo(null);
+            this.dispose();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Yönetici Giriş Bilgileri Hatalı!!");
+        }
+        
+    }//GEN-LAST:event_jButtonYöneticiActionPerformed
 
     /**
      * @param args the command line arguments

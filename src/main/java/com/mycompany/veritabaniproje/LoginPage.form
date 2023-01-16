@@ -125,6 +125,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Y&#xd6;NET&#x130;C&#x130; G&#x130;R&#x130;&#x15e;&#x130;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonY&#xf6;neticiActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
