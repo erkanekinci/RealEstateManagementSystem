@@ -252,7 +252,7 @@ public class BuyingPage extends javax.swing.JFrame {
 
     private void jButtonSatinAlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSatinAlActionPerformed
         // TODO add your handling code here:
-        int result = JOptionPane.showConfirmDialog(null,"<html>1500 TL Döner Sermaye Ücretini Onaylıyor musunuz?</html>","Onay",JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(null,"<html>1500 TL Döner Sermaye Ücretini ve İşlem Ücretini Ödemeyi Onaylıyor musunuz?</html>","Onay",JOptionPane.YES_NO_OPTION);
         if(result == JOptionPane.YES_OPTION){
             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
         int selectedRow = jTable1.getSelectedRow();

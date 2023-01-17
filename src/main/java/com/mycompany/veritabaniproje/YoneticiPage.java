@@ -36,21 +36,22 @@ public class YoneticiPage extends javax.swing.JFrame {
         };
         String query = "select * from islem ";
         ResultSet rs = DBConnection.list(query);
-        Object [] columns ={"Tapu No","Alıcı","Satıcı","Fiyat","Ek Ücretler","Toplam","Tarih"};
-        Object[] rows = new Object[7];
+        Object [] columns ={"ID","Tapu No","Alıcı","Satıcı","Fiyat","Ek Ücretler","Toplam","Tarih"};
+        Object[] rows = new Object[8];
         myModel.setColumnCount(0);
         myModel.setRowCount(0);
         myModel.setColumnIdentifiers(columns);
         
         try {
             while(rs.next()){
-                rows[0]=rs.getString("tapuno");
-                rows[1]=rs.getString("alıcı");
-                rows[2]=rs.getString("satıcı");
-                rows[3]=rs.getString("fiyat");
-                rows[4]=rs.getString("ekstra");
-                rows[5]=rs.getString("toplam");
-                rows[6]=rs.getString("tarih");
+                rows[0]=rs.getInt("ID");
+                rows[1]=rs.getString("tapuno");
+                rows[2]=rs.getString("alıcı");
+                rows[3]=rs.getString("satıcı");
+                rows[4]=rs.getString("fiyat");
+                rows[5]=rs.getString("ekstra");
+                rows[6]=rs.getString("toplam");
+                rows[7]=rs.getString("tarih");
                 
                 
                 myModel.addRow(rows);
@@ -117,6 +118,7 @@ public class YoneticiPage extends javax.swing.JFrame {
         jButtonYoneticiCikis = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,6 +155,13 @@ public class YoneticiPage extends javax.swing.JFrame {
 
         jLabel6.setText("<html>Toplam ek ücretler</html>");
 
+        jButton1.setText("Kayıt Sil");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -177,11 +186,13 @@ public class YoneticiPage extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGap(43, 43, 43)
-                                        .addComponent(jLabel5)))
+                                        .addComponent(jLabel5))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jButton1)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(0, 78, Short.MAX_VALUE)))
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
@@ -207,7 +218,9 @@ public class YoneticiPage extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonYoneticiCikis, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButtonYoneticiCikis)
+                                .addComponent(jButton1))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(88, 88, 88)))))
@@ -225,6 +238,28 @@ public class YoneticiPage extends javax.swing.JFrame {
         loginPage.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonYoneticiCikisActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+                int result = JOptionPane.showConfirmDialog(null,"<html>Kayıt Silinecektir Onaylıyor musunuz?</html>","Onay",JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION){
+                    DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+                    int selectedRow = jTable1.getSelectedRow();
+                    Object ID = model.getValueAt(selectedRow, 0);
+                    ID = (Integer) ID;
+                    String query = "delete from islem where id ='"+ID+"'";
+                    try {
+                        PreparedStatement ps = DBConnection.connection.prepareStatement(query);
+                        ps.execute();
+                    } catch (SQLException e) {
+                        Logger.getLogger(YoneticiPage.class.getName()).log(Level.SEVERE, null, e);
+
+                    }
+                    init();
+
+                }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,6 +297,7 @@ public class YoneticiPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonYoneticiCikis;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
