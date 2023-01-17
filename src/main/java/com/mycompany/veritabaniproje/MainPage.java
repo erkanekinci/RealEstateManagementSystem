@@ -265,11 +265,12 @@ public class MainPage extends javax.swing.JFrame {
 
         }else{
             String TC = JOptionPane.showInputDialog(null, "Bağış yapmak istediğiniz kişinin TC Kimlik Numarası:");
-            if(DBConnection.checkUserWithTc(TC)){
+            if(TC != null){
+                if(DBConnection.checkUserWithTc(TC)){
                 Object tapuNo = model.getValueAt(selectedRow, 0);
                 tapuNo = (String) tapuNo;
                 
-                
+                String sql = "update arsalar set satılık = -1 where tapuno = '"+tapuNo+"'";
                 String query = "update sahiplik set tcno = '"+TC+"' where tapuno = '"+tapuNo+"'";
                 try {
                     
@@ -277,9 +278,12 @@ public class MainPage extends javax.swing.JFrame {
             
                     PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
                     preparedStatement.executeUpdate();
+                    
+                    
+                    PreparedStatement ps = DBConnection.connection.prepareStatement(sql);
+                    preparedStatement.executeUpdate();
                 
-                
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     Logger.getLogger(BuyingPage.class.getName()).log(Level.SEVERE,null,e);
                     JOptionPane.showMessageDialog(null, e);
 
@@ -288,6 +292,9 @@ public class MainPage extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(null, "Kayıtlı kullanıcı bulunmamaktadır!");
             }
+                
+            }
+            
             
             
         }
@@ -304,7 +311,8 @@ public class MainPage extends javax.swing.JFrame {
             tapuno = (String) tapuno;
             String fiyat = JOptionPane.showInputDialog(null, "Yeni Fiyat: ");
             String query = "update arsalar set fiyat = '"+fiyat+"' where tapuno='"+tapuno+"' ";
-             try {
+            if(fiyat != null){
+                try {
                     PreparedStatement preparedStatement = DBConnection.connection.prepareStatement(query);
                     preparedStatement.executeUpdate();
                 
@@ -315,6 +323,8 @@ public class MainPage extends javax.swing.JFrame {
 
                 }
                 refreshTable();
+            }
+             
         }
     }//GEN-LAST:event_jButtonFiyatDuzenleActionPerformed
 

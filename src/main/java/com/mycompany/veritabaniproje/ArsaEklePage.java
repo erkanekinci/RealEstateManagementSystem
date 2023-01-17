@@ -160,8 +160,8 @@ public class ArsaEklePage extends javax.swing.JFrame {
         String sqlQuery = "create or replace function arsaEkle() "
                 + "returns void as ' "
                 + "begin "
-                + "insert into arsalar values(''"+tapuno+"'',''"+il+"'',''"+ilce+"'',''"+mahalle+"'',''"+fiyat+"'');"
                 + "insert into sahiplik values (''"+tapuno+"'',''"+tc+"''); "
+                + "insert into arsalar values(''"+tapuno+"'',''"+il+"'',''"+ilce+"'',''"+mahalle+"'',''"+fiyat+"'',-1);"
                 + "end; "
                 + "' language 'plpgsql'; "
                 + " select arsaEkle();";
